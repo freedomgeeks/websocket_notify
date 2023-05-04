@@ -1,0 +1,30 @@
+<script>
+ws = new WebSocket("ws://127.0.0.1:2000");
+ws.onopen = function() {
+    console.log("连接成功");
+    /**
+     * uid 用户身份
+     * data.status 1 心跳/成功状态
+     *             2 完成状态（同时服务端关闭连接）
+     *             3 失败状态（同时服务端关闭连接）
+     * to 发送对象（"all"代表发送广播）
+     * @type {string}
+     */
+	var data='{"uid":1,"data":{"status":1},"to":"1"}';
+	console.log(data);
+    ws.send(data);
+};
+ws.onmessage = function(e) {
+    console.log("收到服务端的消息：" + e.data);
+};
+/**
+ * var c1='{"uid":1,"data":{"status":1},"to":"1"}';
+ *
+ * var c2='{"uid":2,"data":{"status":1,'content':'hello'},"to":"1"}';
+ *
+ * 先打开c1,再打开c2
+ * c1收到 {"status":1} {"status":1,'content':'hello'}{"status":1}{"status":1}...
+ * c2收到 {"status":1}{"status":1}{"status":1}...
+ *
+ */
+</script>
